@@ -1,0 +1,6 @@
+*.swp
+*.jar
+*.class
+bin/
+lib/
+

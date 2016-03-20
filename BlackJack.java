@@ -1,21 +1,15 @@
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Deque;
-import java.util.ArrayDeque;
-import java.util.Collection;
+import java.util.*;
 import java.lang.Integer;
 import static java.util.Arrays.asList;
 
 public class BlackJack {
 
-    int shoeSize;
     Deque<Integer> shoe;
     ArrayList<Integer> dealerHand;
     ArrayList<Integer> playerHand;
     int dealerVal;
     int playerVal;
+    int losses, wins, rounds;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -28,8 +22,8 @@ public class BlackJack {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public BlackJack(int shoeSize){
-        this.shoeSize = shoeSize;
-        
+
+        losses = 0; wins = 0; rounds = 0;
         // Build the shoe
         ArrayList<Integer> shoeList = new ArrayList<Integer>();
         int[] ranks = new int[] {2,3,4,5,6,7,8,9,10,10,10,10,11};
@@ -116,4 +110,11 @@ public class BlackJack {
             playerHand.add(shoe.poll());
         playerVal = playerHand.stream().mapToInt(Integer::intValue).sum();
     }
+
+    public int getResult(){
+        if (playerVal > 21)
+            Syetem.out.println(ANSI_RED + "Player Busts, Dealer Wins" +
+            ANSI_RESET);
+
+            
 }

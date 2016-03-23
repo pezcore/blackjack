@@ -35,9 +35,10 @@ public class BlackJack {
         Collections.shuffle(shoeList);
         shoe = new ArrayDeque<Integer>(shoeList);
     }
-        
+
     public static void main(String[] args){
         int ss = Integer.parseInt(args[0]);
+        int result;
         BlackJack bj = new BlackJack(ss);
 
         int loses = 0 , wins = 0;
@@ -45,31 +46,7 @@ public class BlackJack {
             System.out.print("Dealing...\t");
             bj.deal();
             bj.play();
-            System.out.printf("Dealer Has: %d\tPlayer has: %d\t", bj.dealerVal,
-                bj.playerVal);
-
-            if (bj.playerVal > 21){
-                System.out.printf(ANSI_RED + "Player busts, Dealer Wins\n" +
-                ANSI_RESET);
-                loses++;
-            }
-            else if (bj.playerVal == bj.dealerVal)
-                System.out.printf(ANSI_BLUE + "Push.\n" + ANSI_RESET);
-            else if (bj.dealerVal > 21 && bj.playerVal <= 21){
-                System.out.printf(ANSI_GREEN + 
-                "Dealer Busts, but player dosn't, Player wins\n" + ANSI_RESET);
-                wins++;
-            }
-            else if (bj.playerVal > bj.dealerVal){
-                System.out.printf(ANSI_GREEN + 
-                "Player exceeds Dealer, Player Wins\n" + ANSI_RESET);
-                wins++;
-            }
-            else if (bj.dealerVal > bj.playerVal){
-                System.out.printf(ANSI_RED +
-                "Dealer exceeds Player, Dealer Wins\n" + ANSI_RESET);
-                loses++;
-            }
+            bj.getResult();
         }
 
         for(int i = 0; i<80; i++)
@@ -86,7 +63,7 @@ public class BlackJack {
     * @return rank of dealers face-up card.
     */
     public int deal(){
-        
+
         // Create new empty ArrayLists for dealer and player hands
         dealerHand = new ArrayList<>();
         playerHand = new ArrayList<>();
@@ -96,7 +73,7 @@ public class BlackJack {
             dealerHand.add(shoe.poll());
             playerHand.add(shoe.poll());
         }
-        
+
         // dealer hits until > 17 stays on all > 17s
         while(dealerHand.stream().mapToInt(Integer::intValue).sum() < 17)
             dealerHand.add(shoe.poll());
@@ -112,9 +89,33 @@ public class BlackJack {
     }
 
     public int getResult(){
-        if (playerVal > 21)
-            Syetem.out.println(ANSI_RED + "Player Busts, Dealer Wins" +
+        if (playerVal > 21){
+            System.out.println(ANSI_RED + "Player Busts, Dealer Wins" +
             ANSI_RESET);
-
-            
+            return -1;
+        }
+        else if(dealerVal > 21){
+            System.out.println(ANSI_GREEN + "Dealer Busts, Player Wins" +
+            ANSI_RESET);
+            return 1;
+        }
+        else if(playerVal == dealerVal){
+            System.out.println(ANSI_BLUE + "Push." + ANSI_RESET);
+            return 0;
+        }
+        else if(playerVal > dealerVal){
+            System.out.println(ANSI_GREEN +
+            "Player exceeds dealer, Player Wins" +
+            ANSI_RESET);
+            return 1;
+        }
+        else if(dealerVal > playerVal){
+            System.out.println(ANSI_GREEN +
+            "Dealer exceeds player, Dealer Wins" +
+            ANSI_RESET);
+            return - 1;
+        }
+        else
+            return -1;
+    }
 }

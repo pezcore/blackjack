@@ -28,7 +28,7 @@ public class BlackJack {
         // Build the shoe
         byte[] ranks = {2,3,4,5,6,7,8,9,10,10,10,10,11};
         int shoeptr = 0;
-        for(byte i = 0; i < shoeSize; i++)
+        for(int i = 0; i < shoeSize; i++)
             for(byte j = 0; j < 4; j++)
                 for(byte rankptr = 0; rankptr < 13; rankptr++, shoeptr++)
                     shoe[shoeptr] = ranks[rankptr];
@@ -39,8 +39,13 @@ public class BlackJack {
     }
 
     public static void main(String[] args){
+        int shoeSize;
+        if (args.length == 1)
+            shoeSize = Integer.parseInt(args[0]);
+        else
+            shoeSize = 8;
 
-        BlackJack bj = new BlackJack(2);
+        BlackJack bj = new BlackJack(shoeSize);
         while (bj.shoeptr < (bj.shoe.length - 10)){
             System.out.printf("Dealing...\t");
             byte dealerVal = bj.deal();
@@ -108,31 +113,40 @@ public class BlackJack {
 
     }
 
-    public void printResult(byte playerVal, byte dealerVal){
+    /**
+     * Get results of a game from player score and dealer score. printing
+     * optional
+     */
+    public byte printResult(byte playerVal, byte dealerVal){
         System.out.printf(
         "Player Had: %d\tDealer Had: %d\t",playerVal,dealerVal);
 
         if (playerVal > 21){
             System.out.println(ANSI_RED + "Player Busts, Dealer Wins" +
             ANSI_RESET);
+            return 1;
         }
         else if(dealerVal > 21){
             System.out.println(ANSI_GREEN + "Dealer Busts, Player Wins" +
             ANSI_RESET);
+            return 2;
         }
         else if(playerVal == dealerVal){
             System.out.println(ANSI_BLUE + "Push." + ANSI_RESET);
+            return 0;
         }
         else if(playerVal > dealerVal){
             System.out.println(ANSI_GREEN +
             "Player exceeds dealer, Player Wins" +
             ANSI_RESET);
+            return 3;
         }
         else if(dealerVal > playerVal){
             System.out.println(ANSI_RED +
             "Dealer exceeds player, Dealer Wins" +
             ANSI_RESET);
+            return 4;
         }
-
+        return -1;
     }
 }

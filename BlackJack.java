@@ -1,15 +1,15 @@
 import java.util.*;
+import java.util.stream.IntStream;
 import java.lang.Integer;
 import static java.util.Arrays.asList;
 
 public class BlackJack {
 
-    Deque<Integer> shoe;
-    ArrayList<Integer> dealerHand;
-    ArrayList<Integer> playerHand;
-    int dealerVal;
-    int playerVal;
-    int losses, wins, rounds;
+    byte[] shoe;
+    byte[] dealerHand = new byte[21];   //needs only hold 21 cards
+    byte[] playerHand = new byte[21];
+    byte dealerHandptr, playerHandptr;
+    int losses, wins, rounds, shoeptr;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -22,100 +22,117 @@ public class BlackJack {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public BlackJack(int shoeSize){
+        // initialize the shoe size
+        shoe = new byte[52*shoeSize];
 
-        losses = 0; wins = 0; rounds = 0;
         // Build the shoe
-        ArrayList<Integer> shoeList = new ArrayList<Integer>();
-        int[] ranks = new int[] {2,3,4,5,6,7,8,9,10,10,10,10,11};
-        for(int suit = 0; suit < 4*shoeSize; suit++)
-            for(int j = 0; j < 13; j++)
-                shoeList.add(ranks[j]);
+        byte[] ranks = {2,3,4,5,6,7,8,9,10,10,10,10,11};
+        int shoeptr = 0;
+        for(byte i = 0; i < shoeSize; i++)
+            for(byte j = 0; j < 4; j++)
+                for(byte rankptr = 0; rankptr < 13; rankptr++, shoeptr++)
+                    shoe[shoeptr] = ranks[rankptr];
 
-        // Shuffle the shoe and convert it to a Deque
-        Collections.shuffle(shoeList);
-        shoe = new ArrayDeque<Integer>(shoeList);
+        shoeptr = 0;
+        // shuffle the shoe
+        shuffle(shoe);
     }
 
     public static void main(String[] args){
-        int ss = Integer.parseInt(args[0]);
-        int result;
-        BlackJack bj = new BlackJack(ss);
 
-        int loses = 0 , wins = 0;
-        for (int roundCt = 0; bj.shoe.size() > 10; roundCt++){
-            System.out.print("Dealing...\t");
-            bj.deal();
-            bj.play();
-            bj.getResult();
+        BlackJack bj = new BlackJack(2);
+        while (bj.shoeptr < (bj.shoe.length - 10)){
+            System.out.printf("Dealing...\t");
+            byte dealerVal = bj.deal();
+            byte playerVal = bj.play();
+            bj.printResult(playerVal, dealerVal);
         }
+    }
 
-        for(int i = 0; i<80; i++)
-            System.out.print("-");
-        System.out.print('\n');
-        System.out.printf("Summary:\nWins: %d\tLosses: %d\t Score: %d\n",
-            wins,loses,wins-loses);
+    // Implementing Fisher–Yates shuffle, shuffles an array of bytes in place
+    public static void shuffle(byte[] ar) {
+        Random rnd = new Random();
+        for (int i = ar.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            byte a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
     }
 
     /**
     * Deals two cards to player and dealer hands. Plays for dealer also, since
     * this is entirely deterministic and independent of player decisions.
     * Dealer stands on Soft 17's.
-    * @return rank of dealers face-up card.
+    * @return value of dealers hand
     */
-    public int deal(){
+    public byte deal(){
 
-        // Create new empty ArrayLists for dealer and player hands
-        dealerHand = new ArrayList<>();
-        playerHand = new ArrayList<>();
-
-        // deal two cards from shoe to dealer and player.
-        for (int i = 0; i < 2; ++i){
-            dealerHand.add(shoe.poll());
-            playerHand.add(shoe.poll());
+        // reset everyones hand
+        byte dealerVal = 0;
+        playerHandptr = 0; dealerHandptr = 0;
+        Arrays.fill(dealerHand, (byte) 0);
+        Arrays.fill(playerHand, (byte) 0);
+        for(byte i = 0; i < 2; ++i){
+            dealerHand[dealerHandptr] = shoe[shoeptr++];
+            dealerVal += dealerHand[dealerHandptr++];
+            playerHand[playerHandptr++] = shoe[shoeptr++];
         }
 
-        // dealer hits until > 17 stays on all > 17s
-        while(dealerHand.stream().mapToInt(Integer::intValue).sum() < 17)
-            dealerHand.add(shoe.poll());
-        dealerVal = dealerHand.stream().mapToInt(Integer::intValue).sum();
+        while(dealerVal < 17){
+            dealerHand[dealerHandptr] = shoe[shoeptr++];
+            dealerVal += dealerHand[dealerHandptr++];
+        }
 
-        return dealerHand.get(1);
+        return dealerVal;
+
     }
 
-    public void play(){
-        while(playerHand.stream().mapToInt(Integer::intValue).sum() < 17)
-            playerHand.add(shoe.poll());
-        playerVal = playerHand.stream().mapToInt(Integer::intValue).sum();
+    /**
+     * Play a round. updates shoeptr (removes cards from shoe) and updates
+     * plater hand
+     * @return value of players hand
+     */
+    public byte play(){
+        byte playerval = 0;
+        for(byte i = 0; i < 2; ++i)
+            playerval += playerHand[i];
+
+        while(playerval < 17){
+            playerHand[playerHandptr] = shoe[shoeptr++];
+            playerval += playerHand[playerHandptr++];
+        }
+
+        return playerval;
+
     }
 
-    public int getResult(){
+    public void printResult(byte playerVal, byte dealerVal){
+        System.out.printf(
+        "Player Had: %d\tDealer Had: %d\t",playerVal,dealerVal);
+
         if (playerVal > 21){
             System.out.println(ANSI_RED + "Player Busts, Dealer Wins" +
             ANSI_RESET);
-            return -1;
         }
         else if(dealerVal > 21){
             System.out.println(ANSI_GREEN + "Dealer Busts, Player Wins" +
             ANSI_RESET);
-            return 1;
         }
         else if(playerVal == dealerVal){
             System.out.println(ANSI_BLUE + "Push." + ANSI_RESET);
-            return 0;
         }
         else if(playerVal > dealerVal){
             System.out.println(ANSI_GREEN +
             "Player exceeds dealer, Player Wins" +
             ANSI_RESET);
-            return 1;
         }
         else if(dealerVal > playerVal){
-            System.out.println(ANSI_GREEN +
+            System.out.println(ANSI_RED +
             "Dealer exceeds player, Dealer Wins" +
             ANSI_RESET);
-            return - 1;
         }
-        else
-            return -1;
+
     }
 }

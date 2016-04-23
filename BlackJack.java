@@ -47,11 +47,22 @@ public class BlackJack {
 
         BlackJack bj = new BlackJack(shoeSize);
         while (bj.shoeptr < (bj.shoe.length - 10)){
+            bj.rounds++;
             System.out.printf("Dealing...\t");
             byte dealerVal = bj.deal();
             byte playerVal = bj.play();
-            bj.printResult(playerVal, dealerVal);
+            byte result = bj.printResult(playerVal,dealerVal);
+            if(result !=0  && result == 2 || result == 3)
+                bj.wins++;
+            if(result !=0 && result == 1 || result == 4)
+                bj.losses++;
         }
+
+        for(int i = 0; i < 80; ++i)
+            System.out.print('-');
+        System.out.print("\nSummary:\n");
+        System.out.printf("Wins:   %d\nLosses: %d\nRounds: %d\n",
+            bj.wins, bj.losses, bj.rounds);
     }
 
     // Implementing Fisher–Yates shuffle, shuffles an array of bytes in place
@@ -79,12 +90,15 @@ public class BlackJack {
         playerHandptr = 0; dealerHandptr = 0;
         Arrays.fill(dealerHand, (byte) 0);
         Arrays.fill(playerHand, (byte) 0);
+
+        // Deal to the cards from the shoe to the dealer and player
         for(byte i = 0; i < 2; ++i){
             dealerHand[dealerHandptr] = shoe[shoeptr++];
             dealerVal += dealerHand[dealerHandptr++];
             playerHand[playerHandptr++] = shoe[shoeptr++];
         }
 
+        // Play for dealer
         while(dealerVal < 17){
             dealerHand[dealerHandptr] = shoe[shoeptr++];
             dealerVal += dealerHand[dealerHandptr++];
@@ -100,6 +114,7 @@ public class BlackJack {
      * @return value of players hand
      */
     public byte play(){
+
         byte playerval = 0;
         for(byte i = 0; i < 2; ++i)
             playerval += playerHand[i];

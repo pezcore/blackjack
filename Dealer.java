@@ -3,7 +3,7 @@ import java.util.*;
 public class Dealer{
     ArrayList<Byte> hand;
     ArrayList<Player> players;
-    private ArrayList<Byte> shoe;
+    ArrayList<Byte> shoe;
 
     public Dealer(int shoeSize){
         // initialize the shoe size
@@ -26,9 +26,19 @@ public class Dealer{
         players.add(p);
     }
 
-    public void printShoe(){
+    void printShoe(){
         for(int i = 0; i < shoe.size();i++)
             System.out.println(shoe.get(i));
+    }
+    
+    void deal(){
+        // deal exactly 2 cards to each player at the table
+        for(Player p : players){
+            p.hand = new ArrayList<Byte>(21);
+            p.hand.add(shoe.remove(0)); p.hand.add(shoe.remove(0));
+        }
+        // deal exactly 2 cards to self.
+        hand.add(shoe.remove(0)); hand.add(shoe.remove(0));
     }
 
     public static void main(String[] args){

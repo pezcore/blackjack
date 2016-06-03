@@ -8,16 +8,16 @@ public class Dealer{
     public Dealer(int shoeSize){
         // initialize the shoe size
         shoe = new ArrayList<Byte>(52*shoeSize);
+        players = new ArrayList<Player>();
+        hand = new ArrayList<Byte>(21);
 
         // Build the shoe
         byte[] ranks = {2,3,4,5,6,7,8,9,10,10,10,10,11};
-        int shoeptr = 0;
         for(int i = 0; i < shoeSize; i++)
             for(byte j = 0; j < 4; j++)
-                for(byte rankptr = 0; rankptr < 13; rankptr++, shoeptr++)
+                for(byte rankptr = 0; rankptr < 13; rankptr++)
                     shoe.add(ranks[rankptr]);
 
-        shoeptr = 0;
         // shuffle the shoe
         Collections.shuffle(shoe);
     }
@@ -42,7 +42,18 @@ public class Dealer{
     }
 
     public static void main(String[] args){
-        Dealer d = new Dealer(1);
-        d.printShoe();
+        int shoeSize;
+        if (args.length == 1)
+            shoeSize = Integer.parseInt(args[0]);
+        else
+            shoeSize = 8;
+
+        Dealer d = new Dealer(shoeSize);
+        Player p = new NaivePlayer();
+        d.players.add(p);
+        while(d.shoe.size() > 10){
+            d.deal();
+            p.play(d);
+        }
     }
 }

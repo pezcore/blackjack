@@ -42,8 +42,8 @@ public class Dealer{
         hand.add(shoe.remove(0)); hand.add(shoe.remove(0));
     }
 
-    public static int play(Dealer d,ArrayList<Byte> hand){
-        assert(hand.size() == 2 && d.hand.size() == 2);
+    public static int play(ArrayList<Byte> shoe,ArrayList<Byte> hand){
+        assert(hand.size() == 2);
 
         // number of aces in hand
         int softAces = Collections.frequency(hand,(byte)11);
@@ -55,12 +55,12 @@ public class Dealer{
         }
 
         while (handval < 17 || (handval == 17 && softAces!=0)){
-            handval += d.shoe.get(0);
+            handval += shoe.get(0);
             if (handval > 21 && softAces > 0){
                 handval -= 10;
                 softAces--;
             }
-            hand.add(d.shoe.remove(0));
+            hand.add(shoe.remove(0));
         }
         return handval;
     }

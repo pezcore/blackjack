@@ -1,7 +1,6 @@
 import java.util.*;
 
-public abstract class Player{
+public abstract class Player extends Participant {
     //needs only hold 21 cards
-    public ArrayList<Byte> hand = new ArrayList<Byte>(21);
     public abstract int play(Dealer d);
 }

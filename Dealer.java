@@ -1,7 +1,6 @@
 import java.util.*;
 
-public class Dealer{
-    ArrayList<Byte> hand;
+public class Dealer extends Participant{
     ArrayList<Player> players;
     ArrayList<Byte> shoe;
 
@@ -76,7 +75,9 @@ public class Dealer{
         int games = 0;
         while(d.shoe.size() > 10){
             d.deal();
-            p.play(d);
+            int playerval = p.play(d);
+            int dealerval = play(d.shoe,d.hand);
+            games++;
         }
     }
 }

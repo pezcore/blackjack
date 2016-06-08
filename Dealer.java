@@ -77,7 +77,45 @@ public class Dealer extends Participant{
             d.deal();
             int playerval = p.play(d);
             int dealerval = play(d.shoe,d.hand);
+            System.out.print("Dealer ");
+            d.printHand(); System.out.printf("= %d\t",dealerval);
+            System.out.print("\tPlayer ");
+            p.printHand(); System.out.printf("= %d\t",playerval);
+
+            if (playerval > 21){
+                System.out.println("Player Busts! Dealer Wins.");
+                p.losses++;
+                d.wins++;
+            } else if (dealerval > 21){
+                System.out.println("Dealer Busts! Player Wins.");
+                p.wins++;
+                d.losses++;
+            } else if (playerval > dealerval){
+                if (playerval == 21 && p.hand.size() == 2)
+                    System.out.println("Player BlackJack! Player Wins");
+                else
+                    System.out.println("Player Exceeds Dealer. Player Wins");
+                p.wins++;
+                d.losses++;
+            } else if (dealerval > playerval){
+                System.out.println("Dealer Exceeds Player. Dealer Wins");
+                d.wins++;
+                p.losses++;
+            } else if (playerval == 21 && p.hand.size()==2 && d.hand.size()!=2){
+                assert(dealerval == 21); // dealer must have 21 to get in here.
+                System.out.println("Player BlackJack! Player wins.");
+                p.wins++;
+                d.losses++;
+            } else if (dealerval == 21 && d.hand.size()==2 && p.hand.size()!=2){
+                assert(playerval == 21); // player must have 21 to get in here.
+                System.out.println("Dealer BlackJack! Dealer wins.");
+                d.wins++;
+                p.losses++;
+            } else
+                System.out.println("Push.");
+
             games++;
+
         }
     }
 }

@@ -11,6 +11,6 @@ public class Participant{
             else
                 System.out.printf("A,");
         }
-        System.out.println("]");
+        System.out.printf("]");
     }
 }

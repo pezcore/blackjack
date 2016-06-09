@@ -2,11 +2,11 @@ import java.util.*;
 
 public class Dealer extends Participant{
     ArrayList<Player> players;
-    ArrayList<Byte> shoe;
+    ArrayDeque<Byte> shoe;
 
     public Dealer(int shoeSize){
         // initialize the shoe size
-        shoe = new ArrayList<Byte>(52*shoeSize);
+        ArrayList<Byte> arLshoe = new ArrayList<>(52*shoeSize);
         players = new ArrayList<Player>();
         hand = new ArrayList<Byte>(21);
 
@@ -15,10 +15,11 @@ public class Dealer extends Participant{
         for(int i = 0; i < shoeSize; i++)
             for(byte j = 0; j < 4; j++)
                 for(byte rankptr = 0; rankptr < 13; rankptr++)
-                    shoe.add(ranks[rankptr]);
+                    arLshoe.add(ranks[rankptr]);
 
         // shuffle the shoe
-        Collections.shuffle(shoe);
+        Collections.shuffle(arLshoe);
+        shoe = new ArrayDeque<>(arLshoe);
     }
 
     public void addPlayer(Player p){
@@ -26,22 +27,22 @@ public class Dealer extends Participant{
     }
 
     void printShoe(){
-        for(int i = 0; i < shoe.size();i++)
-            System.out.println(shoe.get(i));
+        for(byte c :shoe)
+            System.out.println(c);
     }
 
     void deal(){
         // deal exactly 2 cards to each player at the table
         for(Player p : players){
             p.hand.clear();
-            p.hand.add(shoe.remove(0)); p.hand.add(shoe.remove(0));
+            p.hand.add(shoe.pop()); p.hand.add(shoe.pop());
         }
         // deal exactly 2 cards to self.
         hand.clear();
-        hand.add(shoe.remove(0)); hand.add(shoe.remove(0));
+        hand.add(shoe.pop()); hand.add(shoe.pop());
     }
 
-    public static int play(ArrayList<Byte> shoe,ArrayList<Byte> hand){
+    public static int play(ArrayDeque<Byte> shoe,ArrayList<Byte> hand){
         assert(hand.size() == 2);
 
         // number of aces in hand
@@ -54,12 +55,12 @@ public class Dealer extends Participant{
         }
 
         while (handval < 17 || (handval == 17 && softAces!=0)){
-            handval += shoe.get(0);
+            handval += shoe.peek();
+            hand.add(shoe.pop());
             if (handval > 21 && softAces > 0){
                 handval -= 10;
                 softAces--;
             }
-            hand.add(shoe.remove(0));
         }
         return handval;
     }

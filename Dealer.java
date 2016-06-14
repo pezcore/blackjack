@@ -74,46 +74,52 @@ public class Dealer extends Participant{
         Player p = new NaivePlayer();
         d.players.add(p);
         int games = 0;
+        Result[] result;
         while(d.shoe.size() > 10){
             d.deal();
-            int playerval = p.play(d);
-            int dealerval = play(d.shoe,d.hand);
-
-            System.out.print("Dealer ");
-            d.printHand(); System.out.printf("= %d\t",dealerval);
-            System.out.print("\tPlayer ");
-            p.printHand(); System.out.printf("= %d\t",playerval);
-
-            if (playerval > 21){
-                System.out.println("Player Busts! Dealer Wins.");
-                p.losses++;
-                d.wins++;
-            } else if (playerval ==21 && p.hand.size() == 2 && 
-                        !(dealerval==21 && d.hand.size()==2)){
-                System.out.println("Player BlackJack! Player Wins.");
-                p.wins++;
-                d.losses++;
-            } else if (dealerval > 21){
-                System.out.println("Dealer Busts! Player Wins.");
-                p.wins++;
-                d.losses++;
-            } else if (playerval > dealerval){
-                System.out.println("Player Exceeds Dealer. Player Wins");
-                p.wins++;
-                d.losses++;
-            } else if (dealerval > playerval){
-                System.out.println("Dealer Exceeds Player. Dealer Wins");
-                d.wins++;
-                p.losses++;
-            } else if (dealerval == 21 && d.hand.size()==2 && p.hand.size()!=2){
-                System.out.println("Dealer BlackJack! Dealer wins.");
-                d.wins++;
-                p.losses++;
-            } else
-                System.out.println("Push.");
-
+            result = d.play();
+            System.out.println(Arrays.toString(result));
             games++;
-
         }
+    }
+
+    /**
+     * Plays a round with all players at the table after they are delt and
+     * returns a byte array specifying results of each players final hand
+     * against the dealer.
+     */
+    public Result[] play(){
+        Result[] results = new Result[players.size()];
+        int dVal = play(shoe,hand);
+        for(int i = 0; i < players.size(); i++){
+            Player p = players.get(i);
+            int pVal = p.play(this);
+            results[i] = getResults(pVal,p.hand.size(),dVal,this.hand.size());
+        }
+        return results;
+    }
+
+    /**
+     * returns a byte specifying the results of a game of blackjack between 2
+     * Participants.
+     * <p>
+     * 0 = player bust
+     * 1 =
+     */
+    public static Result getResults(int pVal, int pSize, int dVal, int dSize){
+        if (pVal > 21){
+            return Result.PLAYERBUST; // player bust
+        } else if (pVal ==21 && pSize == 2 && !(dVal==21 && dSize==2)){
+            return Result.PLAYERBLACKJACK; // player BlackJack
+        } else if (dVal > 21){
+            return Result.DEALERBUST; // Dealer Bust
+        } else if (pVal > dVal){
+            return Result.PLAYERWIN; // player exceed
+        } else if (dVal > pVal){
+            return Result.DEALERWIN; // Dealer Exceed
+        } else if (dVal == 21 && dSize==2 && pSize!=2){
+            return Result.DEALERBLACKJACK; // Dealer BlackJack.
+        } else
+            return Result.PUSH; // push
     }
 }

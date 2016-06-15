@@ -95,6 +95,20 @@ public class Dealer extends Participant{
             Player p = players.get(i);
             int pVal = p.play(this);
             results[i] = getResults(pVal,p.hand.size(),dVal,this.hand.size());
+            if (results[i] == Result.PLAYERBUST ||
+                results[i] == Result.DEALERWIN ||
+                results[i] == Result.DEALERBLACKJACK){
+                p.losses++;
+                p.bankroll -= 10;
+            } else if (results[i] == Result.PLAYERWIN ||
+                results[i] == Result.DEALERBUST){
+                p.wins++;
+                p.bankroll += 10;
+            } else if (results[i] == Result.PLAYERBLACKJACK){
+                p.wins ++;
+                p.bankroll += 15;
+            }
+
         }
         return results;
     }

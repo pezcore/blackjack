@@ -81,6 +81,12 @@ public class Dealer extends Participant{
             System.out.println(Arrays.toString(result));
             games++;
         }
+
+        System.out.println("------------------------------------------------");
+        System.out.printf("Wins: %d\n",p.wins);
+        System.out.printf("Losses: %d\n",p.losses);
+        System.out.printf("Games: %d\n",games);
+        System.out.printf("BankRoll: %d\n",p.bankroll);
     }
 
     /**

@@ -85,7 +85,7 @@ public class Dealer extends Participant{
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
             int pVal = p.play(this);
-            results[i] = getResults(pVal,p.hand.size(),dVal,this.hand.size());
+            results[i] = getResults(p.hand, this.hand);
             if (results[i] == Result.PLAYERBUST ||
                 results[i] == Result.DEALERWIN ||
                 results[i] == Result.DEALERBLACKJACK){
@@ -111,18 +111,19 @@ public class Dealer extends Participant{
      * 0 = player bust
      * 1 =
      */
-    public static Result getResults(int pVal, int pSize, int dVal, int dSize){
-        if (pVal > 21){
+    public static Result getResults(Hand pHand, Hand dHand){
+        if (pHand.value > 21){
             return Result.PLAYERBUST; // player bust
-        } else if (pVal ==21 && pSize == 2 && !(dVal==21 && dSize==2)){
+        } else if (pHand.value ==21 && pHand.size() == 2 && !(dHand.value==21
+        && dHand.size()==2)){
             return Result.PLAYERBLACKJACK; // player BlackJack
-        } else if (dVal > 21){
+        } else if (dHand.value > 21){
             return Result.DEALERBUST; // Dealer Bust
-        } else if (pVal > dVal){
+        } else if (pHand.value > dHand.value){
             return Result.PLAYERWIN; // player exceed
-        } else if (dVal > pVal){
+        } else if (dHand.value > pHand.value){
             return Result.DEALERWIN; // Dealer Exceed
-        } else if (dVal == 21 && dSize==2 && pSize!=2){
+        } else if (dHand.value == 21 && dHand.size()==2 && pHand.size()!=2){
             return Result.DEALERBLACKJACK; // Dealer BlackJack.
         } else
             return Result.PUSH; // push

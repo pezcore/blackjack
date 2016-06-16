@@ -8,7 +8,6 @@ public class Dealer extends Participant{
         // initialize the shoe size
         ArrayList<Byte> arLshoe = new ArrayList<>(52*shoeSize);
         players = new ArrayList<Player>();
-        hand = new ArrayList<Byte>(21);
 
         // Build the shoe
         byte[] ranks = {2,3,4,5,6,7,8,9,10,10,10,10,11};
@@ -42,27 +41,10 @@ public class Dealer extends Participant{
         hand.add(shoe.pop()); hand.add(shoe.pop());
     }
 
-    public static int play(ArrayDeque<Byte> shoe,ArrayList<Byte> hand){
-        assert(hand.size() == 2);
-
-        // number of aces in hand
-        int softAces = Collections.frequency(hand,(byte)11);
-        int handval = hand.get(0) + hand.get(1);
-        if (handval > 21){
-            assert(softAces == 2);
-            handval -= 10;
-            softAces--;
-        }
-
-        while (handval < 17 || (handval == 17 && softAces!=0)){
-            handval += shoe.peek();
+    public static int play(ArrayDeque<Byte> shoe,Hand hand){
+        while (hand.value < 17 || (hand.value == 17 && hand.softAces!=0))
             hand.add(shoe.pop());
-            if (handval > 21 && softAces > 0){
-                handval -= 10;
-                softAces--;
-            }
-        }
-        return handval;
+        return hand.value;
     }
 
     public static void main(String[] args){
@@ -78,6 +60,9 @@ public class Dealer extends Participant{
         while(d.shoe.size() > 10){
             d.deal();
             result = d.play();
+            System.out.print(p.hand.toString());
+            System.out.print(d.hand.toString());
+            System.out.print('\t');
             System.out.println(Arrays.toString(result));
             games++;
         }

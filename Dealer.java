@@ -1,4 +1,5 @@
 import java.util.*;
+import org.apache.commons.cli.*;
 
 public class Dealer extends Participant{
     ArrayList<Player> players;
@@ -51,17 +52,44 @@ public class Dealer extends Participant{
         return hand.value;
     }
 
-    public static void main(String[] args){
-        int shoeSize, shoes = 0;
-        if (args.length == 1) shoeSize = Integer.parseInt(args[0]);
-        else shoeSize = 8;
+    public static void main(String[] args) throws ParseException{
+        Options options = new Options();
+        options.addOption("s", true, "Shoe size in decks");
+        options.addOption("n", true, "Games to play");
+        options.addOption("N", true, "Shoes to play");
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse( options, args);
+
+        int shoeSize, maxGames, maxShoes;
+
+        String shoeSizeString = cmd.getOptionValue("s");
+        if (shoeSizeString != null)
+            shoeSize = Integer.parseInt(shoeSizeString);
+        else
+            shoeSize = 6;
+
+        String maxGamesString = cmd.getOptionValue("n");
+        if (maxGamesString != null)
+            maxGames = Integer.parseInt(maxGamesString);
+        else
+            maxGames = Integer.MAX_VALUE;
+
+        String maxShoesString = cmd.getOptionValue("N");
+        if (maxShoesString != null)
+            maxShoes = Integer.parseInt(maxShoesString);
+        else
+            maxShoes = Integer.MAX_VALUE;
+
+
+
+        int shoes, games;
+        shoes = games = 0;
 
         Dealer d = new Dealer(shoeSize);
         Player p = new NaivePlayer();
         d.players.add(p);
-        int games = 0;
         Result[] result;
-        while(games < 100){
+        while(games < maxGames && shoes < maxShoes){
             d.deal();
             result = d.play();
             System.out.print(p.hand.toString());
@@ -71,7 +99,7 @@ public class Dealer extends Participant{
             games++;
 
             if (d.shoe.size() < 10){
-                d.shoe = newShoe(6);
+                d.shoe = newShoe(shoeSize);
                 shoes++;
                 System.out.println("Reshuffled   ---------------------------");
             }

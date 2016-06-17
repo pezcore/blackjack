@@ -3,6 +3,7 @@ import java.util.*;
 public class Hand extends ArrayList<Byte>{
     byte value = 0;
     byte softAces = 0;
+    private static final long serialVersionUID = 42L;
 
     public Hand(){
         super(21);

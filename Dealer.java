@@ -6,19 +6,23 @@ public class Dealer extends Participant{
 
     public Dealer(int shoeSize){
         // initialize the shoe size
-        ArrayList<Byte> arLshoe = new ArrayList<>(52*shoeSize);
+        shoe = newShoe(shoeSize);
         players = new ArrayList<Player>();
+    }
+
+    public static ArrayDeque<Byte> newShoe(int size){
+        ArrayList<Byte> arLshoe = new ArrayList<>(52*size);
 
         // Build the shoe
         byte[] ranks = {2,3,4,5,6,7,8,9,10,10,10,10,11};
-        for(int i = 0; i < shoeSize; i++)
+        for(int i = 0; i < size; i++)
             for(byte j = 0; j < 4; j++)
                 for(byte rankptr = 0; rankptr < 13; rankptr++)
                     arLshoe.add(ranks[rankptr]);
 
         // shuffle the shoe
         Collections.shuffle(arLshoe);
-        shoe = new ArrayDeque<>(arLshoe);
+        return new ArrayDeque<>(arLshoe);
     }
 
     public void addPlayer(Player p){
@@ -48,7 +52,7 @@ public class Dealer extends Participant{
     }
 
     public static void main(String[] args){
-        int shoeSize;
+        int shoeSize, shoes = 0;
         if (args.length == 1) shoeSize = Integer.parseInt(args[0]);
         else shoeSize = 8;
 
@@ -57,7 +61,7 @@ public class Dealer extends Participant{
         d.players.add(p);
         int games = 0;
         Result[] result;
-        while(d.shoe.size() > 10){
+        while(games < 100){
             d.deal();
             result = d.play();
             System.out.print(p.hand.toString());
@@ -65,12 +69,19 @@ public class Dealer extends Participant{
             System.out.print('\t');
             System.out.println(Arrays.toString(result));
             games++;
+
+            if (d.shoe.size() < 10){
+                d.shoe = newShoe(6);
+                shoes++;
+                System.out.println("Reshuffled   ---------------------------");
+            }
         }
 
         System.out.println("------------------------------------------------");
         System.out.printf("Wins: %d\n",p.wins);
         System.out.printf("Losses: %d\n",p.losses);
         System.out.printf("Games: %d\n",games);
+        System.out.printf("Shoes: %d\n",shoes);
         System.out.printf("BankRoll: %d\n",p.bankroll);
     }
 

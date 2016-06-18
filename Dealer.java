@@ -54,15 +54,16 @@ public class Dealer extends Participant{
 
     public static void main(String[] args) throws ParseException{
         Options options = new Options();
-        options.addOption("s", true, "Shoe size in decks");
+        options.addOption("S", true, "Shoe size in decks");
         options.addOption("n", true, "Games to play");
         options.addOption("N", true, "Shoes to play");
+        options.addOption("s", true, "Strategy");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse( options, args);
 
         int shoeSize, maxGames, maxShoes;
 
-        String shoeSizeString = cmd.getOptionValue("s");
+        String shoeSizeString = cmd.getOptionValue("S");
         if (shoeSizeString != null)
             shoeSize = Integer.parseInt(shoeSizeString);
         else
@@ -80,13 +81,20 @@ public class Dealer extends Participant{
         else
             maxShoes = Integer.MAX_VALUE;
 
-
+        String strategyString = cmd.getOptionValue("s");
 
         int shoes, games;
         shoes = games = 0;
 
         Dealer d = new Dealer(shoeSize);
-        Player p = new NaivePlayer();
+        Player p;
+        if(strategyString != null && strategyString.equals("basic")){
+            p = new BasicPlayer();
+            System.out.println("Selecting Basic");
+        } else {
+            p = new NaivePlayer();
+            System.out.println("Selecting Naïve");
+        }
         d.players.add(p);
         Result[] result;
         while(games < maxGames && shoes < maxShoes){

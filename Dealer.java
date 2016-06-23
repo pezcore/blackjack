@@ -95,7 +95,9 @@ public class Dealer extends Participant{
             p = new NaivePlayer();
             System.out.println("Selecting Naïve");
         }
+
         d.players.add(p);
+        p.dealer = d;
         Result[] result;
         while(games < maxGames && shoes < maxShoes){
             d.deal();
@@ -124,15 +126,15 @@ public class Dealer extends Participant{
 
     /**
      * Plays a round with all players at the table after they are delt and
-     * returns a byte array specifying results of each players final hand
+     * returns a Result array specifying results of each players final hand
      * against the dealer.
      */
     public Result[] play(){
         Result[] results = new Result[players.size()];
-        int dVal = play(shoe,hand);
+        play(shoe,hand);
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
-            int pVal = p.play(this);
+            int pVal = p.play();
             results[i] = getResults(p.hand, this.hand);
             if (results[i] == Result.PLAYERBUST ||
                 results[i] == Result.DEALERWIN ||

@@ -1,5 +1,5 @@
 public class NaivePlayer extends Player{
-    public int play(Dealer d){
-        return Dealer.play(d.shoe,hand);
+    public int play(){
+        return Dealer.play(dealer.shoe,hand);
     }
 }

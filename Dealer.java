@@ -103,7 +103,8 @@ public class Dealer extends Participant{
             System.out.print(p.hand.toString());
             System.out.print(d.hand.toString());
             System.out.print('\t');
-            System.out.println(Arrays.toString(result));
+            System.out.print(Arrays.toString(result));
+            System.out.printf("\t%d\n",p.bankroll);
             games++;
 
             if (d.shoe.size() < 10){

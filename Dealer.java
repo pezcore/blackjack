@@ -4,6 +4,7 @@ import org.apache.commons.cli.*;
 public class Dealer extends Participant{
     ArrayList<Player> players;
     ArrayDeque<Byte> shoe;
+    Hand hand = new Hand();
 
     public Dealer(int shoeSize){
         // initialize the shoe size
@@ -38,8 +39,10 @@ public class Dealer extends Participant{
     void deal(){
         // deal exactly 2 cards to each player at the table
         for(Player p : players){
-            p.hand.clear();
-            p.hand.add(shoe.pop()); p.hand.add(shoe.pop());
+            p.hands.clear();
+            p.hands.add(new Hand());
+            p.hands.get(0).add(shoe.pop());
+            p.hands.get(0).add(shoe.pop());
         }
         // deal exactly 2 cards to self.
         hand.clear();
@@ -102,7 +105,7 @@ public class Dealer extends Participant{
         while(games < maxGames && shoes < maxShoes){
             d.deal();
             result = d.play();
-            System.out.print(p.hand.toString());
+            System.out.print(p.hands.get(0).toString());
             System.out.print(d.hand.toString());
             System.out.print('\t');
             System.out.print(Arrays.toString(result));
@@ -134,8 +137,8 @@ public class Dealer extends Participant{
         play(shoe,hand);
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
-            int pVal = p.play();
-            results[i] = getResults(p.hand, this.hand);
+            p.play();
+            results[i] = getResults(p.hands.get(0), this.hand);
             if (results[i] == Result.PLAYERBUST ||
                 results[i] == Result.DEALERWIN ||
                 results[i] == Result.DEALERBLACKJACK){

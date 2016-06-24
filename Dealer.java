@@ -56,6 +56,7 @@ public class Dealer extends Participant{
     public static int play(ArrayDeque<Byte> shoe,Hand hand){
         while (hand.value < 17 || (hand.value == 17 && hand.softAces!=0))
             hand.add(shoe.pop());
+        hand.done = true;
         return hand.value;
     }
 

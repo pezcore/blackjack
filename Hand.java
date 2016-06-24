@@ -4,7 +4,9 @@ public class Hand extends ArrayList<Byte>{
     byte value = 0;
     byte softAces = 0;
     int wager = 10;
+    boolean done = false;
     private static final long serialVersionUID = 42L;
+
 
     public Hand(){
         super(21);

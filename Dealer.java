@@ -4,7 +4,7 @@ import org.apache.commons.cli.*;
 public class Dealer extends Participant{
     ArrayList<Player> players;
     ArrayDeque<Byte> shoe;
-    Hand hand = new Hand();
+    private Hand hand = new Hand();
 
     public Dealer(int shoeSize){
         // initialize the shoe size
@@ -29,6 +29,10 @@ public class Dealer extends Participant{
 
     public void addPlayer(Player p){
         players.add(p);
+    }
+
+    byte getUpCard(){
+        return hand.get(0);
     }
 
     void printShoe(){

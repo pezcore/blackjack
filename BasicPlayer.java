@@ -1,17 +1,17 @@
 public class BasicPlayer extends Player{
     public int play(Hand hand){
-        byte dealerHole = dealer.hand.get(0);
+        byte dealerUp = dealer.getUpCard();
         while (hand.value < 19){
             // ALWAYS hit under 11
             if (hand.value <= 11)
                 hit(hand);
-            else if (hand.value == 12 && dealerHole >= 4 && dealerHole <= 6)
+            else if (hand.value == 12 && dealerUp >= 4 && dealerUp <= 6)
                 return hand.value;
             else if(hand.value == 12)
                 hit(hand);
             else if (hand.softAces == 0)
                 if (hand.value >= 13 && hand.value <=16)
-                    if (dealerHole <= 6)
+                    if (dealerUp <= 6)
                         return hand.value;
                     else
                         hit(hand);
@@ -23,7 +23,7 @@ public class BasicPlayer extends Player{
                 if (hand.value >= 13 && hand.value <=17)
                     hit(hand);
                 else if (hand.value == 18)
-                    if (dealerHole <= 8)
+                    if (dealerUp <= 8)
                         return hand.value;
                     else
                         hit(hand);

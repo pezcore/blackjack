@@ -1,7 +1,6 @@
 public abstract class Player extends Participant {
     int bankroll;
     Dealer dealer;
-    int wager = 10;
 
     public abstract int play();
 
@@ -10,7 +9,7 @@ public abstract class Player extends Participant {
     }
 
     public void double_down(){
-        wager *= 2;
+        hand.wager *= 2;
         hit();
     }
 }

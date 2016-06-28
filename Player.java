@@ -20,4 +20,15 @@ public abstract class Player extends Participant {
         hand.wager *= 2;
         hit(hand);
     }
+
+    void split(Hand hand){
+        assert(hand.get(0) == hand.get(1));
+        Hand newHand = new Hand();
+        hands.add(newHand);
+        newHand.add(hand.remove(1));
+        hand.wager /= 2;
+        newHand.wager = hand.wager;
+        play(hand);
+        play(newHand);
+    }
 }

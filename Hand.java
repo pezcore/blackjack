@@ -16,6 +16,7 @@ public class Hand extends ArrayList<Byte>{
         super.clear();
         value = 0;
         softAces = 0;
+        done = false;
     }
 
 

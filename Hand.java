@@ -50,4 +50,11 @@ public class Hand extends ArrayList<Byte>{
         return String.format("%10s|%d",new String(str),value);
 
     }
+
+    public boolean isSplitable(){
+        if (size() == 2 && get(0) == get(1))
+            return true;
+        else
+            return false;
+    }
 }

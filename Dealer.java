@@ -172,20 +172,20 @@ public class Dealer extends Participant{
     public static Result getResults(Hand pHand, Hand dHand){
         if (pHand.surrendered)
             return Result.PLAYERSURRENDER;
-        else if (pHand.value > 21){
+        else if (pHand.value > 21)
             return Result.PLAYERBUST; // player bust
-        } else if (pHand.value ==21 && pHand.size() == 2 && !(dHand.value==21
-        && dHand.size()==2)){
+        else if (pHand.value ==21 && pHand.size() == 2 && !(dHand.value==21
+        && dHand.size()==2))
             return Result.PLAYERBLACKJACK; // player BlackJack
-        } else if (dHand.value > 21){
+        else if (dHand.value > 21)
             return Result.DEALERBUST; // Dealer Bust
-        } else if (pHand.value > dHand.value){
+        else if (pHand.value > dHand.value)
             return Result.PLAYERWIN; // player exceed
-        } else if (dHand.value > pHand.value){
+        else if (dHand.value > pHand.value)
             return Result.DEALERWIN; // Dealer Exceed
-        } else if (dHand.value == 21 && dHand.size()==2 && pHand.size()!=2){
+        else if (dHand.value == 21 && dHand.size()==2 && pHand.size()!=2)
             return Result.DEALERBLACKJACK; // Dealer BlackJack.
-        } else
+        else
             return Result.PUSH; // push
     }
 }

@@ -170,7 +170,9 @@ public class Dealer extends Participant{
      * 1 =
      */
     public static Result getResults(Hand pHand, Hand dHand){
-        if (pHand.value > 21){
+        if (pHand.surrendered)
+            return Result.PLAYERSURRENDER;
+        else if (pHand.value > 21){
             return Result.PLAYERBUST; // player bust
         } else if (pHand.value ==21 && pHand.size() == 2 && !(dHand.value==21
         && dHand.size()==2)){

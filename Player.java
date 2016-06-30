@@ -31,4 +31,10 @@ public abstract class Player extends Participant {
         play(hand);
         play(newHand);
     }
+
+    void surrender(Hand hand){
+        hand.done = true;
+        hand.surrendered = true;
+        hand.wager /= 2;
+    }
 }

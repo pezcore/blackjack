@@ -67,43 +67,30 @@ public class BasicPlayer extends Player{
 
     public int play(Hand hand){
         byte dealerUp = dealer.getUpCard();
-        while (hand.value < 19){
-            // ALWAYS hit under 11
-            if (hand.value <= 11)
-                hit(hand);
-            else if (hand.value == 12 && dealerUp >= 4 && dealerUp <= 6){
-                hand.done = true;
-                return hand.value;
-            } else if(hand.value == 12)
-                hit(hand);
-            else if (hand.softAces == 0)
-                if (hand.value >= 13 && hand.value <=16)
-                    if (dealerUp <= 6){
-                        hand.done = true;
-                        return hand.value;
-                    } else
-                        hit(hand);
-                else if (hand.value >= 17){
-                    hand.done = true;
-                    return hand.value;
-                } else
-                System.out.printf("%d\n",hand.value);
+        int dec;
+
+        while (!hand.done){
+            // get decision
+            if (hand.isSplitable())
+                dec = splitLUT[getIndex(hand)][dealerUp-2];
             else if (hand.softAces != 0)
-                if (hand.value >= 13 && hand.value <=17)
-                    hit(hand);
-                else if (hand.value == 18)
-                    if (dealerUp <= 8){
-                        hand.done = true;
-                        return hand.value;
-                    } else
-                        hit(hand);
-                else if (hand.value >= 19){
-                    hand.done = true;
-                    return hand.value;
-                } else
-                System.out.println("HARD ERROR");
+                dec = softLUT[getIndex(hand)][dealerUp-2];
+            else if (hand.softAces == 0 && !hand.isSplitable())
+                dec = hardLUT[getIndex(hand)][dealerUp-2];
+            else
+                return -1;
+
+            //execute decision
+            switch (dec){
+                case 0: hand.done = true; break;
+                case 1: hit(hand); break;
+                case 2: double_down(hand); break;
+                case 3: surrender(hand); break;
+                case 4: double_down(hand); break;
+                case 5: split(hand); break;
+            }
         }
-        hand.done = true;
+
         return hand.value;
     }
 }

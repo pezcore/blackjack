@@ -6,8 +6,7 @@ public abstract class Player extends Participant {
     ArrayList<Hand> hands = new ArrayList<>(4);
 
     public void play(){
-        for (Hand h : hands)
-            play(h);
+        play(hands.get(0));
     }
 
     public abstract int play(Hand hand);

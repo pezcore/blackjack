@@ -23,10 +23,12 @@ public abstract class Player extends Participant {
 
     void split(Hand hand){
         assert(hand.get(0) == hand.get(1));
-        Hand newHand = new Hand();
-        hands.add(newHand);
-        newHand.add(hand.remove(1));
-        hand.wager /= 2;
+        Hand newHand = new Hand();      // create new hand
+        hands.add(newHand);             // add new hand to list of hands
+        newHand.add(hand.remove(1));    // split the original hand
+        newHand.add(dealer.shoe.pop()); // deal another card to new hand
+        hand.add(dealer.shoe.pop());    // deal another card to original hand
+        hand.wager /= 2;                // split the wager
         newHand.wager = hand.wager;
         play(hand);
         play(newHand);

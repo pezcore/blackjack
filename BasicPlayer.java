@@ -29,7 +29,7 @@ public class BasicPlayer extends Player{
         {0,0,0,0,0,0,0,0,0,0},
         {5,5,5,5,5,5,5,5,5,5}};
 
-    private int getIndex(Hand hand){
+    private static int getIndex(Hand hand){
         if (hand.isSplitable())
             if (hand.get(0) == (byte) 11)
                 return 8;

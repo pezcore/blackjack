@@ -7,6 +7,8 @@ public abstract class Player extends Participant {
 
     public void play(){
         play(hands.get(0));
+        for (PlayerHand h : hands)
+            assert(h.done);
     }
 
     public abstract int play(Hand hand);

@@ -1,3 +1,4 @@
+import java.math.*;
 import java.util.*;
 import org.apache.commons.cli.*;
 
@@ -151,19 +152,22 @@ public class Dealer extends Participant{
     }
 
     static int payOut(Player p, PlayerHand h){
+        BigDecimal payOut;
         if (h.result == Result.PLAYERBUST ||
             h.result == Result.DEALERWIN ||
             h.result == Result.DEALERBLACKJACK){
             p.losses++;
-            p.bankroll -= h.wager;
+            payOut = h.wager.negate();
         } else if (h.result == Result.PLAYERWIN ||
             h.result == Result.DEALERBUST){
             p.wins++;
-            p.bankroll += h.wager;
+            payOut = h.wager;
         } else if (h.result == Result.PLAYERBLACKJACK){
             p.wins ++;
-            p.bankroll += h.wager + h.wager/2;
-        }
+            payOut = h.wager.multiply(new BigDecimal("1.5"));
+        } else
+            throw new Error("Unexpected result");
+        p.bankroll = p.bankroll.add(payOut);
         return 0;
     }
 

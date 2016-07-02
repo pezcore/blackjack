@@ -1,9 +1,10 @@
+import java.math.*;
 import java.util.*;
 
 public class Hand extends ArrayList<Byte>{
     byte value = 0;
     byte softAces = 0;
-    int wager = 10;
+    BigDecimal wager = BigDecimal.TEN;
     boolean done = false;
     boolean surrendered = false;
     private static final long serialVersionUID = 42L;

@@ -1,7 +1,8 @@
 import java.util.*;
+import java.math.*;
 
 public abstract class Player extends Participant {
-    int bankroll;
+    BigDecimal bankroll = BigDecimal.ZERO;
     Dealer dealer;
     ArrayList<PlayerHand> hands = new ArrayList<>(4);
 
@@ -18,7 +19,7 @@ public abstract class Player extends Participant {
     }
 
     public void double_down(Hand hand){
-        hand.wager *= 2;
+        hand.wager = hand.wager.multiply(new BigDecimal(2));
         hit(hand);
     }
 
@@ -29,7 +30,7 @@ public abstract class Player extends Participant {
         newHand.add(hand.remove(1));    // split the original hand
         newHand.add(dealer.shoe.pop()); // deal another card to new hand
         hand.add(dealer.shoe.pop());    // deal another card to original hand
-        hand.wager /= 2;                // split the wager
+        hand.wager = hand.wager.divide(new BigDecimal(2));// split the wager
         newHand.wager = hand.wager;
         play(hand);
         play(newHand);
@@ -38,6 +39,6 @@ public abstract class Player extends Participant {
     void surrender(Hand hand){
         hand.done = true;
         hand.surrendered = true;
-        hand.wager /= 2;
+        hand.wager = hand.wager.divide(new BigDecimal(2));
     }
 }

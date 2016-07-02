@@ -153,7 +153,9 @@ public class Dealer extends Participant{
 
     static int payOut(Player p, PlayerHand h){
         BigDecimal payOut;
-        if (h.result == Result.PLAYERBUST ||
+        if (h.result == Result.PUSH)
+           return 0;
+        else if (h.result == Result.PLAYERBUST ||
             h.result == Result.DEALERWIN ||
             h.result == Result.DEALERBLACKJACK ||
             h.result == Result.PLAYERSURRENDER){

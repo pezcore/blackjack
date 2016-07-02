@@ -114,7 +114,7 @@ public class Dealer extends Participant{
                 System.out.print(p.hands.get(i).toString());
             System.out.print(d.hand.toString());
             System.out.print('\t');
-            System.out.printf("\t%d\n",p.bankroll);
+            System.out.printf("\t%s\n",p.bankroll.toString());
             games++;
 
             if (d.shoe.size() < 10){
@@ -129,7 +129,7 @@ public class Dealer extends Participant{
         System.out.printf("Losses: %d\n",p.losses);
         System.out.printf("Games: %d\n",games);
         System.out.printf("Shoes: %d\n",shoes);
-        System.out.printf("BankRoll: %d\n",p.bankroll);
+        System.out.printf("BankRoll: %s\n",p.bankroll.toString());
     }
 
     /**

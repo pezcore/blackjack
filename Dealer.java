@@ -106,11 +106,11 @@ public class Dealer extends Participant{
 
         d.players.add(p);
         p.dealer = d;
-        int result;
         while(games < maxGames && shoes < maxShoes){
             d.deal();
-            result = d.play();
-            System.out.print(p.hands.get(0).toString());
+            d.play();
+            for (int i = 0; i < p.hands.size(); i++)
+                System.out.print(p.hands.get(i).toString());
             System.out.print(d.hand.toString());
             System.out.print('\t');
             System.out.printf("\t%d\n",p.bankroll);

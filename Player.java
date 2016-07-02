@@ -3,7 +3,7 @@ import java.util.*;
 public abstract class Player extends Participant {
     int bankroll;
     Dealer dealer;
-    ArrayList<Hand> hands = new ArrayList<>(4);
+    ArrayList<PlayerHand> hands = new ArrayList<>(4);
 
     public void play(){
         play(hands.get(0));
@@ -22,7 +22,7 @@ public abstract class Player extends Participant {
 
     void split(Hand hand){
         assert(hand.get(0) == hand.get(1));
-        Hand newHand = new Hand();      // create new hand
+        PlayerHand newHand = new PlayerHand();      // create new hand
         hands.add(newHand);             // add new hand to list of hands
         newHand.add(hand.remove(1));    // split the original hand
         newHand.add(dealer.shoe.pop()); // deal another card to new hand

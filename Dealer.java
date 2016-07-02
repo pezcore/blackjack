@@ -44,7 +44,7 @@ public class Dealer extends Participant{
         // deal exactly 2 cards to each player at the table
         for(Player p : players){
             p.hands.clear();
-            p.hands.add(new Hand());
+            p.hands.add(new PlayerHand());
             p.hands.get(0).add(shoe.pop());
             p.hands.get(0).add(shoe.pop());
         }

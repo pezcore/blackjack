@@ -49,7 +49,7 @@ public class BasicPlayer extends Player{
             else if (hand.value == 13 || hand.value == 14)
                 return 0;
             else
-                return -1;
+                throw new Error("Couldn't find soft index!");
         else if (hand.softAces == 0 && !hand.isSplitable())
             if (hand.value >= 5 && hand.value <= 8)
                 return 0;
@@ -60,16 +60,16 @@ public class BasicPlayer extends Player{
             else if (hand.value >= 18 && hand.value <= 20)
                 return 8;
             else
-                return -1;
+                throw new Error("Couldn't fine hard index!");
         else
-            return -1;
+            throw new Error("Hand is completely fucked!");
     }
 
     public int play(Hand hand){
         byte dealerUp = dealer.getUpCard();
         int dec;
 
-        while (!hand.done){
+        while (!hand.done && hand.value < 21){
             // get decision
             if (hand.isSplitable())
                 dec = splitLUT[getIndex(hand)][dealerUp-2];
@@ -91,6 +91,7 @@ public class BasicPlayer extends Player{
             }
         }
 
+        hand.done = true;
         return hand.value;
     }
 }

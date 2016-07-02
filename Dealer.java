@@ -106,14 +106,13 @@ public class Dealer extends Participant{
 
         d.players.add(p);
         p.dealer = d;
-        Result[] result;
+        int result;
         while(games < maxGames && shoes < maxShoes){
             d.deal();
             result = d.play();
             System.out.print(p.hands.get(0).toString());
             System.out.print(d.hand.toString());
             System.out.print('\t');
-            System.out.print(Arrays.toString(result));
             System.out.printf("\t%d\n",p.bankroll);
             games++;
 
@@ -137,29 +136,35 @@ public class Dealer extends Participant{
      * returns a Result array specifying results of each players final hand
      * against the dealer.
      */
-    public Result[] play(){
-        Result[] results = new Result[players.size()];
+    public int play(){
+        // Play own hand
         play(shoe,hand);
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
             p.play();
-            results[i] = getResults(p.hands.get(0), this.hand);
-            if (results[i] == Result.PLAYERBUST ||
-                results[i] == Result.DEALERWIN ||
-                results[i] == Result.DEALERBLACKJACK){
-                p.losses++;
-                p.bankroll -= 10;
-            } else if (results[i] == Result.PLAYERWIN ||
-                results[i] == Result.DEALERBUST){
-                p.wins++;
-                p.bankroll += 10;
-            } else if (results[i] == Result.PLAYERBLACKJACK){
-                p.wins ++;
-                p.bankroll += 15;
+            for (PlayerHand ph: p.hands){
+                assignResult(ph);
+                payOut(p,ph);
             }
-
         }
-        return results;
+        return 0;
+    }
+
+    static int payOut(Player p, PlayerHand h){
+        if (h.result == Result.PLAYERBUST ||
+            h.result == Result.DEALERWIN ||
+            h.result == Result.DEALERBLACKJACK){
+            p.losses++;
+            p.bankroll -= h.wager;
+        } else if (h.result == Result.PLAYERWIN ||
+            h.result == Result.DEALERBUST){
+            p.wins++;
+            p.bankroll += h.wager;
+        } else if (h.result == Result.PLAYERBLACKJACK){
+            p.wins ++;
+            p.bankroll += h.wager + h.wager/2;
+        }
+        return 0;
     }
 
     /**
@@ -187,5 +192,11 @@ public class Dealer extends Participant{
             return Result.DEALERBLACKJACK; // Dealer BlackJack.
         else
             return Result.PUSH; // push
+    }
+
+    int assignResult(PlayerHand hand){
+        assert(hand.done);
+        hand.result = getResults(hand,this.hand);
+        return 0;
     }
 }

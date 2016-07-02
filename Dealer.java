@@ -155,7 +155,8 @@ public class Dealer extends Participant{
         BigDecimal payOut;
         if (h.result == Result.PLAYERBUST ||
             h.result == Result.DEALERWIN ||
-            h.result == Result.DEALERBLACKJACK){
+            h.result == Result.DEALERBLACKJACK ||
+            h.result == Result.PLAYERSURRENDER){
             p.losses++;
             payOut = h.wager.negate();
         } else if (h.result == Result.PLAYERWIN ||

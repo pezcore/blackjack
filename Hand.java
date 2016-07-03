@@ -7,6 +7,7 @@ public class Hand extends ArrayList<Byte>{
     BigDecimal wager = BigDecimal.TEN;
     boolean done = false;
     boolean surrendered = false;
+    boolean hasSplit = false;
     private static final long serialVersionUID = 42L;
 
 
@@ -39,6 +40,7 @@ public class Hand extends ArrayList<Byte>{
     public Byte remove(int idx){
         // you can only remove a card from a splittable hand
         assert(isSplitable());
+        hasSplit = true;
         Byte removed = super.remove(idx);
         if (removed == (byte) 11)
             value --;

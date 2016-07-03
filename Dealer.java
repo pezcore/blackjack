@@ -188,8 +188,10 @@ public class Dealer extends Participant{
             return Result.PLAYERSURRENDER;
         else if (pHand.value > 21)
             return Result.PLAYERBUST; // player bust
-        else if (pHand.value ==21 && pHand.size() == 2 && !(dHand.value==21
-        && dHand.size()==2))
+        else if(pHand.value == 21 &&
+                pHand.size() == 2 &&
+                !pHand.hasSplit &&
+                !(dHand.value==21 && dHand.size()==2))
             return Result.PLAYERBLACKJACK; // player BlackJack
         else if (dHand.value > 21)
             return Result.DEALERBUST; // Dealer Bust

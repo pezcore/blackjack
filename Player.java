@@ -30,6 +30,7 @@ public abstract class Player extends Participant {
         newHand.add(dealer.shoe.pop()); // deal another card to new hand
         hand.add(dealer.shoe.pop());    // deal another card to original hand
         newHand.wager = hand.wager;     // copy wager
+        newHand.hasSplit = true;        // indicate hand is born of a split
         play(hand);
         play(newHand);
     }

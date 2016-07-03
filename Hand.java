@@ -35,6 +35,18 @@ public class Hand extends ArrayList<Byte>{
         return changed;
     }
 
+    @Override
+    public Byte remove(int idx){
+        // you can only remove a card from a splittable hand
+        assert(isSplitable());
+        Byte removed = super.remove(idx);
+        if (removed == (byte) 11)
+            value --;
+        else
+            value -= removed;
+        return removed;
+    }
+
     public String toString(){
         char[] str = new char[size()];
         byte card;
@@ -49,7 +61,6 @@ public class Hand extends ArrayList<Byte>{
                 str[i] = 'A';
         }
         return String.format("%10s|%d",new String(str),value);
-
     }
 
     public boolean isSplitable(){

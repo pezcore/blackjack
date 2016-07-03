@@ -24,7 +24,6 @@ public abstract class Player extends Participant {
     }
 
     void split(Hand hand){
-        assert(hand.get(0) == hand.get(1));
         PlayerHand newHand = new PlayerHand();      // create new hand
         hands.add(newHand);             // add new hand to list of hands
         newHand.add(hand.remove(1));    // split the original hand

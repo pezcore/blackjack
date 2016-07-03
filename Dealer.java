@@ -117,7 +117,7 @@ public class Dealer extends Participant{
             System.out.printf("\t%s\n",p.bankroll.toString());
             games++;
 
-            if (d.shoe.size() < 10){
+            if (d.shoe.size() < 20){
                 d.shoe = newShoe(shoeSize);
                 shoes++;
                 System.out.println("Reshuffled   ---------------------------");

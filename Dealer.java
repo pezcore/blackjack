@@ -6,6 +6,7 @@ public class Dealer extends Participant{
     ArrayList<Player> players;
     ArrayDeque<Byte> shoe;
     private Hand hand = new Hand();
+    Rules rules = new Rules();
 
     public Dealer(int shoeSize){
         // initialize the shoe size
@@ -54,9 +55,10 @@ public class Dealer extends Participant{
         hand.add(shoe.pop()); hand.add(shoe.pop());
     }
 
-    public static int play(ArrayDeque<Byte> shoe,Hand hand){
-        while (hand.value < 17 || (hand.value == 17 && hand.softAces!=0))
-            hand.add(shoe.pop());
+    public static int play(ArrayDeque<Byte> shoe,Hand hand, boolean hitSoft17){
+        while (hand.value < 17 ||
+        (hand.value == 17 && hand.softAces!=0 && hitSoft17))
+                hand.add(shoe.pop());
         hand.done = true;
         return hand.value;
     }
@@ -139,7 +141,7 @@ public class Dealer extends Participant{
      */
     public int play(){
         // Play own hand
-        play(shoe,hand);
+        play(shoe,hand,rules.hitSoft17s);
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
             p.play();

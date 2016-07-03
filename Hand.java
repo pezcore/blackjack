@@ -15,10 +15,13 @@ public class Hand extends ArrayList<Byte>{
         super(21);
     }
 
+    @Override
     public void clear(){
         super.clear();
         value = 0;
         softAces = 0;
+        wager = BigDecimal.TEN;
+        surrendered = false;
         done = false;
     }
 

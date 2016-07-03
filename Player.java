@@ -29,8 +29,7 @@ public abstract class Player extends Participant {
         newHand.add(hand.remove(1));    // split the original hand
         newHand.add(dealer.shoe.pop()); // deal another card to new hand
         hand.add(dealer.shoe.pop());    // deal another card to original hand
-        hand.wager = hand.wager.divide(new BigDecimal(2));// split the wager
-        newHand.wager = hand.wager;
+        newHand.wager = hand.wager;     // copy wager
         play(hand);
         play(newHand);
     }

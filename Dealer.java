@@ -112,11 +112,14 @@ public class Dealer extends Participant{
         while(games < maxGames && shoes < maxShoes){
             d.deal();
             d.play();
-            for (int i = 0; i < p.hands.size(); i++)
-                System.out.print(p.hands.get(i).toString());
+            for (PlayerHand hand : p.hands){
+                System.out.print(hand);
+            }
             System.out.print(d.hand.toString());
-            System.out.print('\t');
-            System.out.printf("\t%s\n",p.bankroll.toString());
+            System.out.printf("\t%s",p.bankroll.toString());
+            for (PlayerHand hand : p.hands)
+                System.out.printf("\t%s",hand.result);
+            System.out.printf("\n");
             games++;
 
             if (d.shoe.size() < 20){

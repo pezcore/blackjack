@@ -36,6 +36,7 @@ public abstract class Player extends Participant {
     }
 
     void surrender(Hand hand){
+        assert(hand.size() == 2); // can only surrender on first decision
         hand.done = true;
         hand.surrendered = true;
         hand.wager = hand.wager.divide(new BigDecimal(2));

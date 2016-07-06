@@ -85,7 +85,8 @@ public class BasicPlayer extends Player{
                 case 0: hand.done = true; break;
                 case 1: hit(hand); break;
                 case 2: double_down(hand); break;
-                case 3: surrender(hand); break;
+                case 3: if (hand.size()==2) surrender(hand); else hit(hand);
+                    break;
                 case 4: double_down(hand); break;
                 case 5: split(hand); break;
             }

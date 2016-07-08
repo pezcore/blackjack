@@ -21,6 +21,7 @@ public abstract class Player extends Participant {
     public void double_down(Hand hand){
         hand.wager = hand.wager.multiply(new BigDecimal(2));
         hit(hand);
+        hand.done = true;
     }
 
     void split(Hand hand){

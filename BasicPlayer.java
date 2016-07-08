@@ -91,8 +91,8 @@ public class BasicPlayer extends Player{
                 case 5: split(hand); break;
             }
         }
-
-        hand.done = true;
+        // this line should be unreachable if not done
+        assert(hand.done = true);
         return hand.value;
     }
 }
